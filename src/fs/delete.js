@@ -16,16 +16,16 @@ async function checkMissingFile() {
   }
 }
 const remove = async () => {
-    if (await checkMissingFile()) {
-        try {
-          await fsPromises.rm(filePath);
-          console.log("File removed successfully!");
-        } catch (error) {
-          console.log(error.message);
-        }
-      } else {
-        console.log("FS operation failed");
-      }
+  if (await checkMissingFile()) {
+    try {
+      await fsPromises.rm(filePath);
+      console.log("File removed successfully!");
+    } catch (error) {
+      console.log(error.message);
+    }
+  } else {
+    console.log("FS operation failed");
+  }
 };
 
 await remove();
