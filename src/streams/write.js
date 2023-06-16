@@ -1,13 +1,15 @@
 import fs from "fs";
-import { fileURLToPath } from "url";
-import path, { dirname } from "path";
+import path from "path";
 
 const write = async () => {
-  const currentModulePath = fileURLToPath(import.meta.url);
-  const currentDirPath = dirname(currentModulePath);
-  const sourceFolderPath = path.join(currentDirPath, "files");
-  const filePath = path.join(sourceFolderPath, "fileToWrite.txt");
+  const currentDirPath = path.dirname(new URL(import.meta.url).pathname);
+  const filePath = path.join(
+    path.join(currentDirPath, "files"),
+    "fileToWrite.txt"
+  );
+
   const writableStream = fs.createWriteStream(filePath, "utf8");
+  
   process.stdin.on("data", (data) => {
     writableStream.write(data);
     process.exit();

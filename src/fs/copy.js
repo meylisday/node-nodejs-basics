@@ -1,15 +1,16 @@
 import { promises as fsPromises, constants as fsConstants } from "fs";
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
+import path from "path";
 
-const currentModulePath = fileURLToPath(import.meta.url);
-const currentDirPath = dirname(currentModulePath);
-const sourceFolderPath = path.join(currentDirPath, "files");
+const currentDirPath = path.dirname(new URL(import.meta.url).pathname);
+const folderPath = path.join(
+  path.dirname(new URL(import.meta.url).pathname),
+  "files"
+);
 const destinationFolderPath = path.join(currentDirPath, "files_copy");
 
 async function checkSourceFolderAccess() {
   try {
-    await fsPromises.access(sourceFolderPath, fsConstants.R_OK);
+    await fsPromises.access(folderPath, fsConstants.R_OK);
     return true;
   } catch (error) {
     console.log(error.message);
@@ -30,9 +31,9 @@ const copy = async () => {
   if ((await checkSourceFolderAccess()) && (await checkDestinationFolder())) {
     try {
       await fsPromises.mkdir(destinationFolderPath);
-      const files = await fsPromises.readdir(sourceFolderPath);
+      const files = await fsPromises.readdir(folderPath);
       for (const file of files) {
-        const sourceFilePath = path.join(sourceFolderPath, file);
+        const sourceFilePath = path.join(folderPath, file);
         const destinationFilePath = path.join(destinationFolderPath, file);
         await fsPromises.copyFile(sourceFilePath, destinationFilePath);
       }

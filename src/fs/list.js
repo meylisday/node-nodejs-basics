@@ -1,14 +1,12 @@
 import { promises as fsPromises, constants as fsConstants } from "fs";
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
+import path from "path";
 
-const currentModulePath = fileURLToPath(import.meta.url);
-const currentDirPath = dirname(currentModulePath);
-const sourceFolderPath = path.join(currentDirPath, "files");
+const currentDirPath = path.dirname(new URL(import.meta.url).pathname);
+const folderPath = path.join(currentDirPath,"files");
 
 async function checkMissingFolder() {
   try {
-    await fsPromises.access(sourceFolderPath, fsConstants.R_OK);
+    await fsPromises.access(folderPath, fsConstants.R_OK);
     return true;
   } catch (error) {
     return false;
@@ -18,7 +16,7 @@ async function checkMissingFolder() {
 const list = async () => {
   if (await checkMissingFolder()) {
     try {
-      const files = await fsPromises.readdir(sourceFolderPath);
+      const files = await fsPromises.readdir(folderPath);
       console.log(files);
     } catch (error) {
       console.log(error.message);

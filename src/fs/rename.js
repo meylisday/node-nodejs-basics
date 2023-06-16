@@ -1,12 +1,9 @@
 import { promises as fsPromises, constants as fsConstants } from "fs";
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
+import path from "path";
 
-const currentModulePath = fileURLToPath(import.meta.url);
-const currentDirPath = dirname(currentModulePath);
-const sourceFolderPath = path.join(currentDirPath, "files");
-const TxtFilePath = path.join(sourceFolderPath, "wrongFilename.txt");
-const MdFilePath = path.join(sourceFolderPath, "properFilename.md");
+const currentDirPath = path.dirname(new URL(import.meta.url).pathname);
+const TxtFilePath = path.join(path.join(currentDirPath,"files"), "wrongFilename.txt");
+const MdFilePath = path.join(path.join(currentDirPath,"files"), "properFilename.md");
 
 async function checkMissingTxtFile() {
   try {

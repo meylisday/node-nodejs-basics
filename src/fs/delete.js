@@ -1,11 +1,8 @@
 import { promises as fsPromises, constants as fsConstants } from "fs";
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
+import path from "path";
 
-const currentModulePath = fileURLToPath(import.meta.url);
-const currentDirPath = dirname(currentModulePath);
-const sourceFolderPath = path.join(currentDirPath, "files");
-const filePath = path.join(sourceFolderPath, "fileToRemove.txt");
+const currentDirPath = path.dirname(new URL(import.meta.url).pathname);
+const filePath = path.join(path.join(currentDirPath,"files"), "fileToRemove.txt");
 
 async function checkMissingFile() {
   try {

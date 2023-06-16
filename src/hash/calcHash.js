@@ -1,14 +1,15 @@
 import crypto from "crypto";
 import { promises as fsPromises } from "fs";
-import { fileURLToPath } from "url";
-import path, { dirname } from "path";
+import path from "path";
 
 const calculateHash = async () => {
-  const currentModulePath = fileURLToPath(import.meta.url);
-  const currentDirPath = dirname(currentModulePath);
-  const sourceFolderPath = path.join(currentDirPath, "files");
-  const filePath = path.join(sourceFolderPath, "fileToCalculateHashFor.txt");
-  const fileBuffer =  await fsPromises.readFileSync(filePath);
+  const currentDirPath = path.dirname(new URL(import.meta.url).pathname);
+  const filePath = path.join(
+    path.join(currentDirPath, "files"),
+    "fileToCalculateHashFor.txt"
+  );
+
+  const fileBuffer = await fsPromises.readFile(filePath);
   const hashSum = crypto.createHash("sha256");
   hashSum.update(fileBuffer);
 

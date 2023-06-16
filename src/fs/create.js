@@ -1,4 +1,4 @@
-import fs from "fs";
+import { promises as fsPromises } from "fs";
 import path from "path";
 
 const create = async () => {
@@ -8,11 +8,11 @@ const create = async () => {
   );
   const filePath = path.join(folderPath, "fresh.txt");
 
-  if (fs.existsSync(filePath)) {
+  if (await fsPromises.existsSync(filePath)) {
     throw new Error("FS operation failed");
   }
 
-  fs.writeFileSync(filePath, "I am fresh and young");
+  await fsPromises.writeFileSync(filePath, "I am fresh and young");
 
   console.log("Fresh file created successfully!");
 };
